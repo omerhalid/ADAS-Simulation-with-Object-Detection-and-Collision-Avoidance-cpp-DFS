@@ -2,47 +2,54 @@
 #include <cstdlib>
 #include <ctime>
 
-using namespace std;
+const int ROWS = 5;
+const int COLS = 5;
+const int RAND_MAX_VAL = 10;  // for random number generation
 
-int main() {
-    const int rows = 5; 
-    const int cols = 5;
-
-    char randomArray[rows][cols]; 
-
-    // Seed the random number generator with current time
-    srand(time(NULL));
+// Function to initialize the grid
+void initializeGrid(char grid[ROWS][COLS]) {
+    // Seed the random number generator with the current time
+    srand(time(nullptr));
 
     // Randomly choose a position for 'v'
-    int vRow = rand() % rows;
-    int vCol = rand() % cols;
+    int vRow = rand() % ROWS;
+    int vCol = rand() % COLS;
 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
             if (i == vRow && j == vCol) {
-                randomArray[i][j] = 'v';
+                grid[i][j] = 'v';
             } else {
-                int randVal = rand() % 10 + 1;
-
-                // Ensure no obstacles around 'v'
+                int randVal = rand() % RAND_MAX_VAL + 1;
                 bool nearVehicle = (i >= vRow - 1 && i <= vRow + 1) && (j >= vCol - 1 && j <= vCol + 1);
-                
+
                 if (randVal <= 2 && !nearVehicle) {
-                    randomArray[i][j] = 'o';
+                    grid[i][j] = 'o';
                 } else {
-                    randomArray[i][j] = ' ';
+                    grid[i][j] = ' ';
                 }
             }
         }
     }
 
-    // Print the array
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            cout << randomArray[i][j] << " ";
+    // Set 'F' at bottom-right
+    grid[ROWS-1][COLS-1] = 'F';
+}
+
+// Function to display the grid
+void displayGrid(const char grid[ROWS][COLS]) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            std::cout << grid[i][j] << " ";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
+}
+
+int main() {
+    char grid[ROWS][COLS];
+    initializeGrid(grid);
+    displayGrid(grid);
 
     return 0;
 }
