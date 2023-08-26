@@ -6,6 +6,64 @@ const int ROWS = 5;
 const int COLS = 5;
 const int RAND_MAX_VAL = 10;  // for random number generation
 
+// Find the current position of the vehicle
+void findPosition(const char grid[ROWS][COLS], int &x, int &y) {
+    for (int i = 0; i < ROWS; i++) {
+        for (int j = 0; j < COLS; j++) {
+            if (grid[i][j] == 'v') {
+                x = i;
+                y = j;
+                return;
+            }
+        }
+    }
+}
+
+// Check if there's an obstacle next to the given cell
+bool isObstacleNextTo(const char grid[ROWS][COLS], int x, int y) {
+    int dx[] = {-1, 1, 0, 0};
+    int dy[] = {0, 0, -1, 1};
+    for (int i = 0; i < 4; i++) {
+        int newX = x + dx[i];
+        int newY = y + dy[i];
+        if (newX >= 0 && newX < ROWS && newY >= 0 && newY < COLS && grid[newX][newY] == 'o') {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Function to move the vehicle based on user input
+void moveVehicleUserInput(char grid[ROWS][COLS]) {
+    int x, y;
+    findPosition(grid, x, y);
+
+    std::cout << "Enter direction (U = up, D = down, L = left, R = right): ";
+    char dir;
+    std::cin >> dir;
+
+    int newX = x;
+    int newY = y;
+
+    switch(dir) {
+        case 'W': newX = x - 1; break;
+        case 'S': newX = x + 1; break;
+        case 'A': newY = y - 1; break;
+        case 'D': newY = y + 1; break;
+        default: std::cout << "Invalid direction." << std::endl; return;
+    }
+
+    if (newX >= 0 && newX < ROWS && newY >= 0 && newY < COLS && grid[newX][newY] != 'o') {
+        grid[x][y] = ' ';
+        grid[newX][newY] = 'v';
+        if (isObstacleNextTo(grid, newX, newY)) {
+            std::cout << "Warning: There's an obstacle next to you!" << std::endl;
+        }
+    } else {
+        std::cout << "Cannot move in that direction." << std::endl;
+    }
+}
+
 // Create a helper function to check if a cell is within the grid and valid for the vehicle to move
 bool isValid(const char grid[ROWS][COLS], bool visited[ROWS][COLS], int x, int y) {
     return (x >= 0 && x < ROWS && y >= 0 && y < COLS && grid[x][y] != 'o' && !visited[x][y]);
@@ -84,17 +142,12 @@ void displayGrid(const char grid[ROWS][COLS]) {
 
 int main() {
     char grid[ROWS][COLS];
-    bool visited[ROWS][COLS] = {false}; // Create a visited array to keep track of visited cells
     initializeGrid(grid);
     displayGrid(grid);
 
-    if (moveVehicle(grid, visited, 0, 0)) {
-        std::cout << "Path found:\n";
-        grid[ROWS-1][COLS-1] = 'F';
-        displayGrid(grid);
-    } else {
-        std::cout << "No path found to reach 'F'.\n";
-    }
+    moveVehicleUserInput(grid);  // Take input and move the vehicle
+
+    displayGrid(grid);  // Display the updated grid
 
     return 0;
 }
