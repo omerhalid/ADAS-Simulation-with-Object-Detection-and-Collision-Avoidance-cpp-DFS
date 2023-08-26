@@ -142,12 +142,17 @@ void displayGrid(const char grid[ROWS][COLS]) {
 
 int main() {
     char grid[ROWS][COLS];
+    bool visited[ROWS][COLS] = {false}; // Create a visited array to keep track of visited cells
     initializeGrid(grid);
     displayGrid(grid);
 
-    moveVehicleUserInput(grid);  // Take input and move the vehicle
-
-    displayGrid(grid);  // Display the updated grid
+    if (moveVehicle(grid, visited, 0, 0)) {
+        std::cout << "Path found:\n";
+        grid[ROWS-1][COLS-1] = 'F';
+        displayGrid(grid);
+    } else {
+        std::cout << "No path found to reach 'F'.\n";
+    }
 
     return 0;
 }
