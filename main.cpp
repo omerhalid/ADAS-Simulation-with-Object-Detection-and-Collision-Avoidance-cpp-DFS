@@ -12,8 +12,9 @@ void initializeGrid(char grid[ROWS][COLS]) {
     srand(time(nullptr));
 
     // Randomly choose a position for 'v'
-    int vRow = rand() % ROWS;
-    int vCol = rand() % COLS;
+    //it is not random at the moment, come back to here later
+    int vRow = 0;
+    int vCol = 0;
 
     for (int i = 0; i < ROWS; i++) {
         for (int j = 0; j < COLS; j++) {
