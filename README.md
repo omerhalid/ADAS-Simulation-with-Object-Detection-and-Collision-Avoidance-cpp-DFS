@@ -18,8 +18,6 @@ Code Breakdown:
 Here's the related code from your project and a step-by-step explanation:
 1. Helper Function isValid:
 
-cpp
-
 bool isValid(const char grid[ROWS][COLS], bool visited[ROWS][COLS], int x, int y) {
     return (x >= 0 && x < ROWS && y >= 0 && y < COLS && grid[x][y] != 'o' && !visited[x][y]);
 }
