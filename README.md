@@ -32,7 +32,6 @@ This function checks whether a given cell (x, y) is valid to move to. The cell i
 
 2. Recursive DFS Function moveVehicle:
 
-cpp
 
 bool moveVehicle(char grid[ROWS][COLS], bool visited[ROWS][COLS], int x, int y) {
     if (grid[x][y] == 'F') {
@@ -72,7 +71,6 @@ bool moveVehicle(char grid[ROWS][COLS], bool visited[ROWS][COLS], int x, int y) 
 
 In the main() function, the moveVehicle function is called initially for the starting position of 'v', which is (0, 0) in your setup.
 
-cpp
 
 if (moveVehicle(grid, visited, 0, 0)) {
     std::cout << "Path found:\n";
