@@ -1,82 +1,38 @@
-# ADAS-Simulation-with-Object-Detection-and-Collision-Avoidance-cpp-DFS
+# Vehicle Navigation Grid
 
-DFS is an algorithm for traversing or searching tree or graph data structures. One starts at the root and explores as far as possible along each branch before backtracking.
+A simple grid-based navigation simulator implemented in C++. The grid contains a vehicle represented by the character 'v' which aims to reach the finish line represented by the character 'F'. The grid can also have obstacles represented by the character 'o'.
 
-The main idea behind DFS is to go deeper into the graph whenever possible.
-Implementation:
+## Table of Contents
 
-    Base Case: If the current cell is the goal, stop and return true.
-    Visit Current Cell: Mark the current cell as visited.
-    Explore Neighbors: Look at the cells around the current one (up, down, left, and right). For each neighboring cell:
-        Check if it's a valid cell to visit (it should be within the grid, not an obstacle, and not already visited).
-        If valid, move to that cell and call the DFS function recursively.
-        If, from that cell, we find a path to the goal, return true.
-    Backtrack: If none of the neighboring cells lead to a solution, return false. This backtracks to the previous cell.
+- [Features](#features)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Contributions](#contributions)
 
-Code Breakdown:
+## Features
 
-Here's the related code from your project and a step-by-step explanation:
-1. Helper Function isValid:
+1. **Dynamic Grid Creation**: A 5x5 grid is randomly generated with the start (vehicle) at the top-left and the finish line at the bottom-right. Obstacles are randomly placed within the grid but not too close to the starting position.
 
-bool isValid(const char grid[ROWS][COLS], bool visited[ROWS][COLS], int x, int y) {
-    return (x >= 0 && x < ROWS && y >= 0 && y < COLS && grid[x][y] != 'o' && !visited[x][y]);
-}
+2. **User Interaction**: Users can manually navigate the vehicle using keyboard directions.
 
-This function checks whether a given cell (x, y) is valid to move to. The cell is valid if:
+3. **DFS-based Path Finder**: The simulator uses a Depth First Search (DFS) approach to find a path from the vehicle's starting position to the finish line.
 
-    It's inside the grid boundaries (x >= 0 && x < ROWS && y >= 0 && y < COLS).
-    It's not an obstacle (grid[x][y] != 'o').
-    It hasn't been visited yet (!visited[x][y]).
+4. **Obstacle Warning**: The simulator provides warnings if the vehicle is next to an obstacle.
 
-2. Recursive DFS Function moveVehicle:
+## Setup
 
+1. Ensure you have a C++ compiler installed on your system.
+2. Clone or download the repository.
+3. Compile the code using your preferred C++ compiler.
 
-bool moveVehicle(char grid[ROWS][COLS], bool visited[ROWS][COLS], int x, int y) {
-    if (grid[x][y] == 'F') {
-        return true;
-    }
+## Usage
 
-    visited[x][y] = true;
+1. Run the compiled executable.
+2. The initial grid will be displayed.
+3. The simulator will automatically find a path from the vehicle's position to the finish line using DFS.
+4. If a path is found, it'll be displayed with `*` marking the path.
 
-    int dx[] = {-1, 1, 0, 0};
-    int dy[] = {0, 0, -1, 1};
+## Contributions
 
-    for (int i = 0; i < 4; i++) {
-        int newX = x + dx[i];
-        int newY = y + dy[i];
+Contributions to improve the simulator are welcome. Please fork the repository and submit a pull request.
 
-        if (isValid(grid, visited, newX, newY)) {
-            if (moveVehicle(grid, visited, newX, newY)) {
-                grid[newX][newY] = 'v';
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-    If the current cell contains 'F', we've reached our destination. So, we return true.
-    Mark the current cell as visited: visited[x][y] = true.
-    The arrays dx and dy help in moving up, down, left, and right, respectively.
-    We loop through the possible neighbors of the current cell using the for-loop.
-        Calculate the coordinates of the neighboring cell: newX = x + dx[i] and newY = y + dy[i].
-        If this neighboring cell is valid, we recursively call moveVehicle for it.
-        If we found a path from that cell (the recursive call returns true), we mark it as part of our path grid[newX][newY] = 'v' and return true.
-    If none of the neighbors lead to a solution, we return false.
-
-3. Main Call:
-
-In the main() function, the moveVehicle function is called initially for the starting position of 'v', which is (0, 0) in your setup.
-
-
-if (moveVehicle(grid, visited, 0, 0)) {
-    std::cout << "Path found:\n";
-    displayGrid(grid);
-} else {
-    std::cout << "No path found to reach 'F'.\n";
-}
-
-This will attempt to find a path from the starting cell (0, 0) to the goal 'F'. If a path is found, it's displayed; otherwise, a "No path found" message appears.
-
-DFS explores as far as possible along each branch before backtracking. In this 2D grid scenario, it means the algorithm will try to move as far as possible in one direction before being blocked and then trying another direction.
